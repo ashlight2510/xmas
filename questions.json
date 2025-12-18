@@ -1,0 +1,56 @@
+{
+  "title": "크리스마스 선물 실패 확률 계산기",
+  "questions": [
+    {
+      "id": "relationship",
+      "label": "관계",
+      "options": [
+        { "value": "lover", "text": "연인 (기대치 ↑)" },
+        { "value": "fling", "text": "썸 (리스크 최고)" },
+        { "value": "spouse", "text": "부부 (실용성 중요)" },
+        { "value": "work", "text": "회사/지인 (안전성 최우선)" }
+      ]
+    },
+    {
+      "id": "budget",
+      "label": "예산",
+      "options": [
+        { "value": "low", "text": "1~3만" },
+        { "value": "mid", "text": "3~7만" },
+        { "value": "high", "text": "7~15만" },
+        { "value": "premium", "text": "15만 이상" }
+      ]
+    },
+    {
+      "id": "giftType",
+      "label": "선물 유형",
+      "options": [
+        { "value": "practical", "text": "실용형 (전자기기, 소모품)" },
+        { "value": "emotional", "text": "감성형 (향수, 편지, 소품)" },
+        { "value": "fashion", "text": "패션형 (의류, 액세서리)" },
+        { "value": "joke", "text": "드립형 (웃긴 선물, 밈)" },
+        { "value": "experience", "text": "경험형 (티켓, 여행, 체험)" }
+      ]
+    },
+    {
+      "id": "persona",
+      "label": "상대 성향",
+      "options": [
+        { "value": "practical", "text": "실용파" },
+        { "value": "sensitive", "text": "감성파" },
+        { "value": "picky", "text": "취향 확고" },
+        { "value": "unknown", "text": "잘 모르겠음 (+15%)" }
+      ]
+    },
+    {
+      "id": "hint",
+      "label": "사전 힌트 여부",
+      "options": [
+        { "value": "told", "text": "직접 말해줌" },
+        { "value": "mentioned", "text": "예전에 언급함" },
+        { "value": "guess", "text": "눈치로 고름" },
+        { "value": "vibe", "text": "그냥 느낌 (+20%)" }
+      ]
+    }
+  ]
+}
