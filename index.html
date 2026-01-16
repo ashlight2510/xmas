@@ -188,7 +188,7 @@
           🎄 X-MAS PICK
         </p>
         <h1 class="text-2xl md:text-3xl font-bold mt-2 text-[var(--text-0)]" data-i18n="title">
-          크리스마스 선물,<br />따뜻함 리포트
+          크리스마스 선물, 따뜻함 리포트
         </h1>
       </header>
 
@@ -210,10 +210,7 @@
           <p id="temperature" class="font-semibold text-lg">
             🎄 포근포근 크리스마스
           </p>
-          <p id="comment" class="mt-2 text-sm">
-            이미 충분히 잘하고 있어요.<br />
-            크리스마스는 마음이 더 중요한 날이에요.
-          </p>
+          <p id="comment" class="mt-2 text-sm"></p>
         </div>
 
         <div class="glass rounded-2xl p-4 text-sm">
@@ -284,6 +281,10 @@
           tip2: "📝 짧은 카드 한 줄이 체감을 바꿔요",
           tip3: "🎁 같이 고르자고 말해도 충분히 좋아요",
           tip4: "🍰 작은 디저트 하나 추가해보세요",
+          temperatureCozy: "🎄 포근포근 크리스마스",
+          temperatureWarm: "🔥 온기 유지 중",
+          temperaturePerfect: "🧣 따뜻하게 마무리하면 완벽",
+          commentDefault: "이미 충분히 잘하고 있어요.<br />크리스마스는 마음이 더 중요한 날이에요.",
         },
         en: {
           metaTitle: "Christmas Gift, Warmth Report 🎁",
@@ -316,6 +317,10 @@
           tip2: "📝 A short card line changes the feeling",
           tip3: "🎁 Saying 'let's choose together' is good enough",
           tip4: "🍰 Add a small dessert",
+          temperatureCozy: "🎄 Cozy Christmas",
+          temperatureWarm: "🔥 Keeping Warm",
+          temperaturePerfect: "🧣 Perfect if finished warmly",
+          commentDefault: "You're already doing well enough.<br />Christmas is a day when the heart matters more.",
         },
       };
 
@@ -337,10 +342,11 @@
         document.title = t("metaTitle");
         document.documentElement.lang = currentLang;
         document.querySelectorAll("[data-i18n]").forEach((el) => {
-          if (el.dataset.i18n.includes("<br")) {
-            el.innerHTML = t(el.dataset.i18n);
+          const translated = t(el.dataset.i18n);
+          if (translated.includes("<br") || translated.includes("<br />") || translated.includes("<br/>")) {
+            el.innerHTML = translated;
           } else {
-            el.textContent = t(el.dataset.i18n);
+            el.textContent = translated;
           }
         });
         document.querySelectorAll("[data-i18n-html]").forEach((el) => {
@@ -396,8 +402,12 @@
           window.history.replaceState({}, "", url);
         }
         // Update dynamic content
-        if (window.step !== undefined) {
-          renderQuestion();
+        if (typeof step !== "undefined" && step !== null) {
+          if (step < getQuestions().length) {
+            renderQuestion();
+          } else if (document.getElementById("resultBox") && !document.getElementById("resultBox").classList.contains("hidden")) {
+            showResult();
+          }
         }
       }
 
@@ -478,6 +488,26 @@
         return tips_base.map((tip) => (lang === "ko" ? tip.ko : tip.en));
       }
 
+      function getQuestions() {
+        const lang = window.currentLang || "ko";
+        const isKo = lang === "ko";
+        return questions_base.map((q) => ({
+          id: q.id,
+          title: isKo ? q.title : t(`question${q.id.charAt(0).toUpperCase() + q.id.slice(1)}`),
+          options: q.options.map((o) => {
+            let key = `option${o.v.charAt(0).toUpperCase() + o.v.slice(1)}`;
+            // persona의 practical은 optionPracticalPersona를 사용
+            if (q.id === "persona" && o.v === "practical") {
+              key = "optionPracticalPersona";
+            }
+            return {
+              v: o.v,
+              t: isKo ? o.t : t(key),
+            };
+          }),
+        }));
+      }
+
       /* ---------------- logic ---------------- */
 
       let step = 0;
@@ -526,18 +556,14 @@
 
         const temp =
           score >= 96
-            ? (lang === "ko" ? "🎄 포근포근 크리스마스" : "🎄 Cozy Christmas")
+            ? t("temperatureCozy")
             : score >= 90
-            ? (lang === "ko" ? "🔥 온기 유지 중" : "🔥 Keeping Warm")
-            : (lang === "ko" ? "🧣 따뜻하게 마무리하면 완벽" : "🧣 Perfect if finished warmly");
+            ? t("temperatureWarm")
+            : t("temperaturePerfect");
 
         document.getElementById("temperature").textContent = temp;
 
-        const comment =
-          lang === "ko"
-            ? "이미 충분히 잘하고 있어요.<br />크리스마스는 마음이 더 중요한 날이에요."
-            : "You're already doing well enough.<br />Christmas is a day when the heart matters more.";
-
+        const comment = t("commentDefault");
         document.getElementById("comment").innerHTML = comment;
 
         const tips = getTips();
